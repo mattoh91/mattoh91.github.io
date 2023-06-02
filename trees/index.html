@@ -216,36 +216,54 @@ This can be done in 1 of 2 ways:</p>
 <ul>
 <li>Make initial prediction:</li>
 <li>Regression: Average target value</li>
-<li>
-<p>Classification: </p>
-<ul>
-<li>Initial prediction uses <code>log odds</code> where <code>odds</code> equal to <code>class count / not class count</code>.</li>
-<li>An additional transformation needs to be applied to <code>log odds</code> to convert it into a probability using a logistic function:</li>
-</ul>
-<p><img alt="probability from log odds" src="../img/prob_from_logodds.png" /></p>
-</li>
-<li>
-<p>Weak learners are trees:</p>
-</li>
+<li>Classification: Initial prediction is a <code>log odds</code> where <code>odds</code> equal to <code>class count / not class count</code>.</li>
+<li>Weak learners are trees:</li>
 <li>That are split based on the standard decision tree splitting criterion.</li>
 <li>With <code>8 - 32</code> leaves.</li>
-<li>Weak learners are trained to predict the pseudo residual.</li>
-<li>The pseudo residual can also be mathematically expressed as the function of the partial derivative / gradient of the loss function against the predicted value, hence the "Gradient" in "Gradient Boost":
-  <img alt="gradient origins" src="../img/gradient_origins.png" /></li>
-<li>All learners are scaled by the same learning rate.</li>
+<li>Scaled by the same learning rate.</li>
+<li>Trained to predict the pseudo residual.</li>
+<li>The pseudo residual:</li>
+<li>
+<p>To compute the pseudo residual, the inital prediction value needs to be converted from a <code>log odds</code> into a <code>probability</code> using a logistic function:</p>
+<p><img alt="log odds to prob" src="../img/logoddstoprob.png" /></p>
+</li>
+<li>
+<p>The residuals are then transformed back into a <code>log odds</code> output using this formula so that they can be added to the initial prediction which is a <code>log odds</code>:</p>
+<p><img alt="prob to log odds" src="../img/gradboost_probtologodds.png" /></p>
+</li>
+<li>
+<p>Can also be mathematically expressed as the function of the partial derivative / gradient of the loss function against the predicted value, hence the "Gradient" in "Gradient Boost":
+    <img alt="gradient origins" src="../img/gradient_origins.png" /></p>
+</li>
 <li>Keep building more trees until </li>
 <li>Additional trees do not significantly reduce size of residuals.</li>
 <li>Maximum number of trees built.</li>
-<li>Prediction: Done by adding scaled (by learning rate) predicted residuals of each learner to the initial prediction.</li>
+<li>Prediction: </li>
+<li>For regression, this is done by adding scaled (by learning rate) predicted residuals of each learner to the initial prediction.</li>
+<li>
+<p>For classification:</p>
+<ul>
+<li>Residuals have been transformed to a <code>log odds</code> output.</li>
+<li>This output is added to the initial prediction to gve a <code>log odds</code> prediction.</li>
+<li>An additional transformation needs to be applied to <code>log odds</code> to convert it into a <code>probability</code> using a logistic function:</li>
+</ul>
+<p><img alt="logodds to prob" src="../img/logoddstoprob.png" /></p>
+</li>
 </ul>
 <h2 id="xgboost">XGBoost</h2>
 <ul>
 <li>Make initial prediction with value of <code>0.5</code> whether XGBoost is used for regression or classification.</li>
+<li>For classification, this is treated to be a <code>probability</code>. This is to be distinguished from standard Gradient Boost where the initial prediction is a <code>log odds</code>.</li>
 <li>Each weak learner tree starts off as a root node of residuals (target - 0.5).</li>
 <li>Weak learners are then split based on the <code>gain in a similarity score</code> when comparing a parent node with its potential child nodes.</li>
+<li>The similarity score is a function of each sample's feature 'residual': eg. row 1 has col 1 value of 123 which gives residual of 23 from average prediction of 100.</li>
 <li>
-<p>The similarity score is a function of each sample's feature 'residual': eg. row 1 has col 1 value of 123 which gives residual of 23 from average prediction of 100.</p>
-<p><img alt="XG sim score" src="../img/xg_simscore.png" /></p>
+<p>Similarity score for regression:</p>
+<p><img alt="XG reg sim score" src="../img/xg_reg_simscore.png" /></p>
+</li>
+<li>
+<p>Similarity score for classification which transforms residuals from a <code>probability</code> into a <code>log odds</code>. Its numerator is the same as the similarity score formula for regression.:</p>
+<p><img alt="XG class sim score" src="../img/xg_class_simscore.png" /></p>
 </li>
 <li>
 <p>The similarity gain is the difference between the similarity score of the parent and its potential child nodes.</p>
@@ -253,24 +271,42 @@ This can be done in 1 of 2 ways:</p>
 <li>This is unlike standard Gradient Boost which grows its learners using a standard decision tree's splitting criterion.</li>
 <li>Prediction: </li>
 <li>
-<p>First uses the following output formula to compute the value of each leaf. This is similar to the similarity score except that the sum of residuals numerator is not squared:</p>
-<p><img alt="XG output formula" src="../img/xg_output.png" /></p>
-</li>
-<li>
-<p>The output scores are multiplied with the learning rate η (eta) - with default value of <code>0.3</code> - and added to the initial predicted value:</p>
+<p>Regression:</p>
+<ul>
+<li>First uses the following output formula to compute the value of each leaf. This is similar to the similarity score except that the sum of residuals numerator is not squared:</li>
+</ul>
+<p><img alt="XG reg output formula" src="../img/xg_reg_output.png" /></p>
+<ul>
+<li>The output scores are multiplied with the learning rate η (eta) - with default value of <code>0.3</code> - and added to the initial predicted value:</li>
+</ul>
 <p><img alt="XG pred" src="../img/xg_pred.png" /></p>
-</li>
-<li>
-<p>The new residuals are computed by taking <code>target - (init val + η * output)</code>. These residuals are then used to build the next tree.</p>
-</li>
+<ul>
+<li>The new residuals are computed by taking <code>target - (init pred + η * output)</code>. These residuals are then used to build the next tree.</li>
+<li>Classification:</li>
+<li>Similar to regression, the residuals are used to compute output values, albeit with a different formula.</li>
+</ul>
+<p><img alt="XG class output formula" src="../img/xg_class_output.png" /></p>
+<ul>
+<li>Again, the output formula is the same as the similarity score formula except that its numerator is not squared.</li>
+<li>The XGBoost output formula is the same as what was used in standard Gradient Boost to convert residuals into <code>log odds</code> except for the addition of Lambda in the denominator.</li>
+<li>To compute the new residuals, the initial prediction needs to be converted from a <code>probability</code> into a <code>log odds</code> using the formula below:</li>
+</ul>
+<p><img alt="prob to logodds" src="../img/probtologodds.png" /></p>
+<ul>
+<li>The log odds predicted value is done using <code>init pred + η * output</code>. It is then converted into a probability, <code>pred proba</code>.</li>
+<li>The new residuals are computed by taking <code>target - pred proba</code>, where <code>target</code> is 1 or 0. These residuals are then used to build the next tree.</li>
 <li>Keep building more trees until </li>
 <li>Additional trees do not significantly reduce size of residuals.</li>
 <li>Maximum number of trees built.</li>
+<li>Hyperparameters:</li>
 <li>λ (Lambda): L2 regularisation term</li>
 <li>Reduces prediction sensitivity to inidivual observations. More </li>
 <li>If Lambda &gt; 0, similarity gain values are smaller. In conjunction with Gamma, pruning is more aggressive.</li>
 <li>α (Alpha): L1 regularisation term</li>
 <li>γ (Gamma): Minimum similarity score gain required to make a further partition on a leaf node of the tree. </li>
+<li>Cover: Number of residuals in each leaf. This is equivalent to the denominator of the similarity score less Lambda.</li>
+</ul>
+</li>
 </ul>
 <h2 id="summary">Summary</h2>
 <table>
@@ -326,6 +362,35 @@ This can be done in 1 of 2 ways:</p>
 <td>Error / Pseudo residual</td>
 <td>XGradient Boosting</td>
 <td>High variance</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Another important distinction between Gradient Boost and XGBoost is that their classififiers have different types of initial prediction values.</li>
+<li>Gradient Boost: Log odds</li>
+<li>XGBoost: Probability</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Algorithm</th>
+<th>Initial Prediction</th>
+<th>Residual</th>
+<th>Learner Prediction</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Gradient Boost</td>
+<td>Log odds</td>
+<td>Proba -&gt; Log odds</td>
+<td>Log odds -&gt; Proba</td>
+</tr>
+<tr>
+<td>XG Boost</td>
+<td>Proba -&gt; Log odds</td>
+<td>Proba -&gt; Log odds</td>
+<td>Log odds -&gt; Proba</td>
 </tr>
 </tbody>
 </table>
