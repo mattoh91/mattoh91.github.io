@@ -63,11 +63,13 @@
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#random-forests">Random Forests</a>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#ada-boost">Ada Boost</a>
+    <li class="toctree-l2"><a class="reference internal" href="#adaboost">AdaBoost</a>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#gradient-boost">Gradient Boost</a>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#xg-boost">XG Boost</a>
+    <li class="toctree-l2"><a class="reference internal" href="#xgboost">XGBoost</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#summary">Summary</a>
     </li>
     </ul>
                 </li>
@@ -154,9 +156,93 @@ This can be done in 1 of 2 ways:</p>
 <li>Post-pruning</li>
 </ul>
 <h2 id="random-forests">Random Forests</h2>
-<h2 id="ada-boost">Ada Boost</h2>
+<h2 id="adaboost">AdaBoost</h2>
+<p>The core principle of AdaBoost is to fit a sequence of weak learners on repeatedly modified versions of the data. The data modifications at each so-called boosting iteration consist of applying weights to each of the training samples. Training examples that were incorrectly predicted by the boosted model induced at the previous step have their weights increased, whereas the weights are decreased for those that were predicted correctly. As iterations proceed, examples that are difficult to predict receive ever-increasing influence. Each subsequent weak learner is thereby forced to concentrate on the examples that are missed by the previous ones in the sequence. The key steps have been documented below:</p>
+<ul>
+<li>Initialise a sample weights column which indicates how important it is for a sample to be correctly classified. This is done by taking <code>1/m</code> where m is the number of samples in the dataset - total weights should sum to 1.</li>
+</ul>
+<p><img alt="ada init sample weights" src="../img/ada_initsampleweights.png" /></p>
+<ul>
+<li>Build a stump with a relevant split criterion - Gini / Entropy for classification; SSR for regression.</li>
+<li>The stump only has 1 root node that splits into 2 leaves immediately.</li>
+<li>This is done using the feature that gives the best split criterion value.</li>
+<li>Compute <code>amount of say</code> (output weight) for the stump using <code>total error</code> [0,1], which is the sum of weights of the incorrectly classified samples:</li>
+</ul>
+<p><img alt="ada amount of say formula" src="../img/ada_amtsay_formula.png" /><br />
+<img alt="ada amount of say graph" src="../img/ada_amtsay_graph.png" /></p>
+<ul>
+<li>
+<p>If stump total error is high, <code>amount of say</code> is negative - will reverse its output.</p>
+</li>
+<li>
+<p>Update weight samples such that incorrectly classified samples have greater weight values.</p>
+</li>
+</ul>
+<p><img alt="ada weight incorrect update formula" src="../img/ada_incorrect_weightupdate_formula.png" /><br />
+<img alt="ada weight incorrect update graph" src="../img/ada_incorrect_weightupdate_graph.png" /></p>
+<ul>
+<li>Update weight samples such that correctly classified samples have smaller weight values.</li>
+</ul>
+<p><img alt="ada weight correct update formula" src="../img/ada_correct_weightupdate_formula.png" /><br />
+<img alt="ada weight correct update graph" src="../img/ada_correct_weightupdate_graph.png" /></p>
+<ul>
+<li>Normalise the updated weights so they sum to 1.</li>
+</ul>
+<p><img alt="ada normalise weights" src="../img/ada_normweights.png" /></p>
+<ul>
+<li>Create the next stump either by:</li>
+<li>Using the normalised weights to compute the weighted split criterion per feature.</li>
+<li>
+<p>Using the normalised weights as a distribution to draw samples from the original dataset.</p>
+<ul>
+<li>As incorrectly classified samples have large weights, they take up a larger range in the distribution and have a higher chance of being sampled.</li>
+<li>Sample until you get the same amount of rows as the original dataset.</li>
+<li>Lastly, reinitialise the sample weights as <code>1/m</code>. The incorrectly classified samples need not retain their higher weight values as they should have been repeatedly sampled into duplicate rows.</li>
+</ul>
+</li>
+<li>
+<p>Prediction:</p>
+</li>
+<li>Classification: The class predicted by the stumps with the highest sum of <code>amount of say</code> will be the final prediction</li>
+<li>Regression: The predictions from all stumps are then combined through a weighted sum to produce the final prediction (sklearn).</li>
+</ul>
 <h2 id="gradient-boost">Gradient Boost</h2>
-<h2 id="xg-boost">XG Boost</h2>
+<h2 id="xgboost">XGBoost</h2>
+<h2 id="summary">Summary</h2>
+<table>
+<thead>
+<tr>
+<th>Algo</th>
+<th>Learner</th>
+<th>Bootstrap</th>
+<th>Learner Weights</th>
+<th>Ensemble Method</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Random Forest</td>
+<td>Full trees</td>
+<td>True</td>
+<td>Equal</td>
+<td>Bagging</td>
+</tr>
+<tr>
+<td>AdaBoost</td>
+<td>Stumps</td>
+<td>False</td>
+<td>Weighted</td>
+<td>Boosting</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
               
             </div>
           </div><footer>
