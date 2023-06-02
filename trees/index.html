@@ -254,8 +254,9 @@ This can be done in 1 of 2 ways:</p>
 <ul>
 <li>Make initial prediction with value of <code>0.5</code> whether XGBoost is used for regression or classification.</li>
 <li>For classification, this is treated to be a <code>probability</code>. This is to be distinguished from standard Gradient Boost where the initial prediction is a <code>log odds</code>.</li>
-<li>Each weak learner tree starts off as a root node of residuals (target - 0.5).</li>
-<li>Weak learners are then split based on the <code>gain in a similarity score</code> when comparing a parent node with its potential child nodes.</li>
+<li>Weak learners:</li>
+<li>Starts off as a root node of residuals (target - 0.5).</li>
+<li>Are <code>NOT</code> decision trees as they are split based on the <code>gain in a similarity score</code> (not split criterion such as Gini, Entropy, SSR) when comparing a parent node with its potential child nodes. This distinguishes XGBoost learners from Gradient Boost learners.</li>
 <li>The similarity score is a function of each sample's feature 'residual': eg. row 1 has col 1 value of 123 which gives residual of 23 from average prediction of 100.</li>
 <li>
 <p>Similarity score for regression:</p>
