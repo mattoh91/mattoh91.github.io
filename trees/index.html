@@ -45,7 +45,7 @@
                 </li>
               </ul>
               <ul>
-                <li class="toctree-l1"><a class="reference internal" href="../hyperparam/">Hyperparameter Tunining</a>
+                <li class="toctree-l1"><a class="reference internal" href="../hyperparam/">Hyperparameter Tuning</a>
                 </li>
               </ul>
               <ul class="current">
@@ -128,6 +128,9 @@ This can be done in 1 of 2 ways:</p>
 <p>The average with the best split criterion metric is chosen.</p>
 <p><img alt="classification tree numeric split eg" src="../img/classtree_numsplit_eg.png" /></p>
 </li>
+<li>
+<p>Prediction: If a leaf consists multiple samples, the predicted class is the mode.</p>
+</li>
 </ul>
 <h3 id="regression-trees">Regression Trees</h3>
 <ul>
@@ -150,6 +153,9 @@ This can be done in 1 of 2 ways:</p>
 </li>
 </ul>
 <p><img alt="regression tree categorical split" src="../img/regtree_catsplit.png" /></p>
+<ul>
+<li>Prediction: If a leaf consists multiple samples, their average target value is taken to represent that leaf.</li>
+</ul>
 <h3 id="pruning">Pruning</h3>
 <ul>
 <li>Pre-pruning</li>
@@ -157,7 +163,7 @@ This can be done in 1 of 2 ways:</p>
 </ul>
 <h2 id="random-forests">Random Forests</h2>
 <h2 id="adaboost">AdaBoost</h2>
-<p>The core principle of AdaBoost is to fit a sequence of weak learners on repeatedly modified versions of the data. The data modifications at each so-called boosting iteration consist of applying weights to each of the training samples. Training examples that were incorrectly predicted by the boosted model induced at the previous step have their weights increased, whereas the weights are decreased for those that were predicted correctly. As iterations proceed, examples that are difficult to predict receive ever-increasing influence. Each subsequent weak learner is thereby forced to concentrate on the examples that are missed by the previous ones in the sequence. The key steps have been documented below:</p>
+<p>The core principle of AdaBoost is to fit a sequence of weak learners on repeatedly modified versions of the data. The data modifications at each so-called boosting iteration consist of applying weights to each of the training samples. Training samples that were incorrectly predicted by the boosted model induced at the previous step have their weights increased, whereas the weights are decreased for those that were predicted correctly. As iterations proceed, samples that are difficult to predict receive ever-increasing influence. Each subsequent weak learner is thereby forced to concentrate on the samples that are missed by the previous ones in the sequence. The key steps have been documented below:</p>
 <ul>
 <li>Initialise a sample weights column which indicates how important it is for a sample to be correctly classified. This is done by taking <code>1/m</code> where m is the number of samples in the dataset - total weights should sum to 1.</li>
 </ul>
@@ -207,39 +213,119 @@ This can be done in 1 of 2 ways:</p>
 <li>Regression: The predictions from all stumps are then combined through a weighted sum to produce the final prediction (sklearn).</li>
 </ul>
 <h2 id="gradient-boost">Gradient Boost</h2>
+<ul>
+<li>Make initial prediction:</li>
+<li>Regression: Average target value</li>
+<li>
+<p>Classification: </p>
+<ul>
+<li>Initial prediction uses <code>log odds</code> where <code>odds</code> equal to <code>class count / not class count</code>.</li>
+<li>An additional transformation needs to be applied to <code>log odds</code> to convert it into a probability using a logistic function:</li>
+</ul>
+<p><img alt="probability from log odds" src="../img/prob_from_logodds.png" /></p>
+</li>
+<li>
+<p>Weak learners are trees:</p>
+</li>
+<li>That are split based on the standard decision tree splitting criterion.</li>
+<li>With <code>8 - 32</code> leaves.</li>
+<li>Weak learners are trained to predict the pseudo residual.</li>
+<li>The pseudo residual can also be mathematically expressed as the function of the partial derivative / gradient of the loss function against the predicted value, hence the "Gradient" in "Gradient Boost":
+  <img alt="gradient origins" src="../img/gradient_origins.png" /></li>
+<li>All learners are scaled by the same learning rate.</li>
+<li>Keep building more trees until </li>
+<li>Additional trees do not significantly reduce size of residuals.</li>
+<li>Maximum number of trees built.</li>
+<li>Prediction: Done by adding scaled (by learning rate) predicted residuals of each learner to the initial prediction.</li>
+</ul>
 <h2 id="xgboost">XGBoost</h2>
+<ul>
+<li>Make initial prediction with value of <code>0.5</code> whether XGBoost is used for regression or classification.</li>
+<li>Each weak learner tree starts off as a root node of residuals (target - 0.5).</li>
+<li>Weak learners are then split based on the <code>gain in a similarity score</code> when comparing a parent node with its potential child nodes.</li>
+<li>
+<p>The similarity score is a function of each sample's feature 'residual': eg. row 1 has col 1 value of 123 which gives residual of 23 from average prediction of 100.</p>
+<p><img alt="XG sim score" src="../img/xg_simscore.png" /></p>
+</li>
+<li>
+<p>The similarity gain is the difference between the similarity score of the parent and its potential child nodes.</p>
+</li>
+<li>This is unlike standard Gradient Boost which grows its learners using a standard decision tree's splitting criterion.</li>
+<li>Prediction: </li>
+<li>
+<p>First uses the following output formula to compute the value of each leaf. This is similar to the similarity score except that the sum of residuals numerator is not squared:</p>
+<p><img alt="XG output formula" src="../img/xg_output.png" /></p>
+</li>
+<li>
+<p>The output scores are multiplied with the learning rate η (eta) - with default value of <code>0.3</code> - and added to the initial predicted value:</p>
+<p><img alt="XG pred" src="../img/xg_pred.png" /></p>
+</li>
+<li>
+<p>The new residuals are computed by taking <code>target - (init val + η * output)</code>. These residuals are then used to build the next tree.</p>
+</li>
+<li>Keep building more trees until </li>
+<li>Additional trees do not significantly reduce size of residuals.</li>
+<li>Maximum number of trees built.</li>
+<li>λ (Lambda): L2 regularisation term</li>
+<li>Reduces prediction sensitivity to inidivual observations. More </li>
+<li>If Lambda &gt; 0, similarity gain values are smaller. In conjunction with Gamma, pruning is more aggressive.</li>
+<li>α (Alpha): L1 regularisation term</li>
+<li>γ (Gamma): Minimum similarity score gain required to make a further partition on a leaf node of the tree. </li>
+</ul>
 <h2 id="summary">Summary</h2>
 <table>
 <thead>
 <tr>
-<th>Algo</th>
+<th>Algorithm</th>
 <th>Learner</th>
+<th>Splits</th>
 <th>Bootstrap</th>
 <th>Learner Weights</th>
+<th>Predicts</th>
 <th>Ensemble Method</th>
+<th>Bias / Variance</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>Random Forest</td>
 <td>Full trees</td>
-<td>True</td>
+<td>Same as DT</td>
+<td>Random</td>
 <td>Equal</td>
+<td>Output</td>
 <td>Bagging</td>
+<td>High bias</td>
 </tr>
 <tr>
 <td>AdaBoost</td>
 <td>Stumps</td>
-<td>False</td>
+<td>Same as DT</td>
+<td>None or weight-based</td>
 <td>Weighted</td>
+<td>Output</td>
 <td>Boosting</td>
+<td>High variance</td>
 </tr>
 <tr>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
+<td>Gradient Boost</td>
+<td>Trees (8 - 32 leaves)</td>
+<td>Same as DT</td>
+<td>None</td>
+<td>Equal using learning rate</td>
+<td>Error / Pseudo residual</td>
+<td>Gradient Boosting</td>
+<td>High variance</td>
+</tr>
+<tr>
+<td>XGBoost</td>
+<td>Trees (depth of 6)</td>
+<td>Similarity Score Gain</td>
+<td>None</td>
+<td>Equal using learning rate</td>
+<td>Error / Pseudo residual</td>
+<td>XGradient Boosting</td>
+<td>High variance</td>
 </tr>
 </tbody>
 </table>
@@ -247,7 +333,7 @@ This can be done in 1 of 2 ways:</p>
             </div>
           </div><footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
-        <a href="../hyperparam/" class="btn btn-neutral float-left" title="Hyperparameter Tunining"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../hyperparam/" class="btn btn-neutral float-left" title="Hyperparameter Tuning"><span class="icon icon-circle-arrow-left"></span> Previous</a>
     </div>
 
   <hr/>
