@@ -3,18 +3,18 @@
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://mattoh91.github.io/ml-notes/hyperparam/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://mattoh91.github.io/ml-notes/regularisation/" />
       <link rel="shortcut icon" href="../img/favicon.ico" />
-    <title>Hyperparameter Tuning - Matt's ML Notes</title>
+    <title>Regularisation - Matt's ML Notes</title>
     <link rel="stylesheet" href="../css/theme.css" />
     <link rel="stylesheet" href="../css/theme_extra.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
     
       <script>
         // Current page data
-        var mkdocs_page_name = "Hyperparameter Tuning";
-        var mkdocs_page_input_path = "hyperparam.md";
-        var mkdocs_page_url = "/ml-notes/hyperparam/";
+        var mkdocs_page_name = "Regularisation";
+        var mkdocs_page_input_path = "regularisation.md";
+        var mkdocs_page_url = "/ml-notes/regularisation/";
       </script>
     
     <script src="../js/jquery-3.6.0.min.js" defer></script>
@@ -44,20 +44,20 @@
                 <li class="toctree-l1"><a class="reference internal" href="..">Welcome to Matt's AI Notes</a>
                 </li>
               </ul>
-              <ul class="current">
-                <li class="toctree-l1 current"><a class="reference internal current" href="./">Hyperparameter Tuning</a>
-    <ul class="current">
-    <li class="toctree-l2"><a class="reference internal" href="#nested-cross-validation">Nested Cross-Validation</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#bayesian">Bayesian</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#tree-structured-parzen-estimator-tpe">Tree-structured Parzen Estimator (TPE)</a>
-    </li>
-    </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../hyperparam/">Hyperparameter Tuning</a>
                 </li>
               </ul>
-              <ul>
-                <li class="toctree-l1"><a class="reference internal" href="../regularisation/">Regularisation</a>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="./">Regularisation</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#l1-lasso">L1 / Lasso</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#l2-ridge">L2 / Ridge</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#references">References:</a>
+    </li>
+    </ul>
                 </li>
               </ul>
               <ul>
@@ -82,7 +82,7 @@
         <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
   <ul class="wy-breadcrumbs">
     <li><a href=".." class="icon icon-home" aria-label="Docs"></a> &raquo;</li>
-      <li>Hyperparameter Tuning</li>
+      <li>Regularisation</li>
     <li class="wy-breadcrumbs-aside">
     </li>
   </ul>
@@ -91,16 +91,35 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
             <div class="section" itemprop="articleBody">
               
-                <h1 id="hyperparameter-tuning">Hyperparameter Tuning</h1>
-<h2 id="nested-cross-validation">Nested Cross-Validation</h2>
-<h2 id="bayesian">Bayesian</h2>
-<h2 id="tree-structured-parzen-estimator-tpe">Tree-structured Parzen Estimator (TPE)</h2>
+                <h1 id="regularisation">Regularisation</h1>
+<p>Regularisation is a method of reducing overfitting / variance by adding a penalty term to the loss function. The penalty term is the norm of the parameter, where "norm" refers to <code>vector norm</code>, which encompasses different ways to measure the magnitude of a vector.  </p>
+<p><img alt="norms" src="../img/vector_norms.png" /></p>
+<p>As the loss function is used in an argmin to find the optimal model parameters, increasing the regularisation hyperparameter forces the parameters it is multiplied with to shrink. Overall, shrinking the parameters reduces the complexity of the model.</p>
+<h2 id="l1-lasso">L1 / Lasso</h2>
+<p>Uses the L1 norm as the regularisation / penalty term in the loss function.<br />
+As the L1 norm is the sum of absolute values of a vector, it is mathematically similar to a square funciton:<br />
+$abs(x) + abs(y) = diag$<br />
+Thus, it imposes a linear constraint:</p>
+<p><img alt="l1 constraint" src="../img/l1_constraint.png" /></p>
+<h2 id="l2-ridge">L2 / Ridge</h2>
+<p>Uses the L2 norm as the regularisation / penalty term in the loss function.<br />
+As the L2 norm is the square root of the sum of squared values of a vector, it is mathematically similar to a circle function:<br />
+$x^2 + y^2 = r^2$<br />
+Thus, it imposes a radial constraint:</p>
+<p><img alt="l2 constraint" src="../img/l2_constraint.png" /></p>
+<p>Unlike the L1 regularisation, the radial contours result in an optimal loss function with parameter values that do not lie on the axes. L2 is hence unable to shrink parameters to 0 unlike L1 regularisation.</p>
+<p><img alt="L1 vs L2 contours" src="../img/L1L2contour.png" /></p>
+<h2 id="references">References:</h2>
+<ul>
+<li>Visual explanation for regularisation of linear models <a href="https://explained.ai/regularization/index.html">article</a></li>
+<li>How does Lasso regression(L1) encourage zero coefficients but not the L2 <a href="https://medium.com/@mukulranjan/how-does-lasso-regression-l1-encourage-zero-coefficients-but-not-the-l2-20e4893cba5d">article</a></li>
+</ul>
               
             </div>
           </div><footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
-        <a href=".." class="btn btn-neutral float-left" title="Welcome to Matt's AI Notes"><span class="icon icon-circle-arrow-left"></span> Previous</a>
-        <a href="../regularisation/" class="btn btn-neutral float-right" title="Regularisation">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../hyperparam/" class="btn btn-neutral float-left" title="Hyperparameter Tuning"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../transformers/" class="btn btn-neutral float-right" title="Transformers">Next <span class="icon icon-circle-arrow-right"></span></a>
     </div>
 
   <hr/>
@@ -123,10 +142,10 @@
   <span class="rst-current-version" data-toggle="rst-current-version">
     
     
-      <span><a href=".." style="color: #fcfcfc">&laquo; Previous</a></span>
+      <span><a href="../hyperparam/" style="color: #fcfcfc">&laquo; Previous</a></span>
     
     
-      <span><a href="../regularisation/" style="color: #fcfcfc">Next &raquo;</a></span>
+      <span><a href="../transformers/" style="color: #fcfcfc">Next &raquo;</a></span>
     
   </span>
 </div>
