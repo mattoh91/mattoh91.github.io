@@ -3,18 +3,18 @@
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://mattoh91.github.io/ml-notes/regularisation/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://mattoh91.github.io/ml-notes/nlp/" />
       <link rel="shortcut icon" href="../img/favicon.ico" />
-    <title>Regularisation - Matt's ML Notes</title>
+    <title>NLP - Matt's ML Notes</title>
     <link rel="stylesheet" href="../css/theme.css" />
     <link rel="stylesheet" href="../css/theme_extra.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
     
       <script>
         // Current page data
-        var mkdocs_page_name = "Regularisation";
-        var mkdocs_page_input_path = "regularisation.md";
-        var mkdocs_page_url = "/ml-notes/regularisation/";
+        var mkdocs_page_name = "NLP";
+        var mkdocs_page_input_path = "nlp.md";
+        var mkdocs_page_url = "/ml-notes/nlp/";
       </script>
     
     <script src="../js/jquery-3.6.0.min.js" defer></script>
@@ -56,14 +56,14 @@
                 <li class="toctree-l1"><a class="reference internal" href="../llms/">BERT</a>
                 </li>
               </ul>
-              <ul>
-                <li class="toctree-l1"><a class="reference internal" href="../nlp/">NLP</a>
-                </li>
-              </ul>
               <ul class="current">
-                <li class="toctree-l1 current"><a class="reference internal current" href="./">Regularisation</a>
+                <li class="toctree-l1 current"><a class="reference internal current" href="./">NLP</a>
     <ul class="current">
     </ul>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../regularisation/">Regularisation</a>
                 </li>
               </ul>
               <ul>
@@ -88,7 +88,7 @@
         <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
   <ul class="wy-breadcrumbs">
     <li><a href=".." class="icon icon-home" aria-label="Docs"></a> &raquo;</li>
-      <li>Regularisation</li>
+      <li>NLP</li>
     <li class="wy-breadcrumbs-aside">
     </li>
   </ul>
@@ -97,35 +97,23 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
             <div class="section" itemprop="articleBody">
               
-                <h1 id="regularisation">Regularisation</h1>
-<p>Regularisation is a method of reducing overfitting / variance by adding a penalty term to the loss function. The penalty term is the norm of the parameter, where "norm" refers to <code>vector norm</code>, which encompasses different ways to measure the magnitude of a vector.  </p>
-<p><img alt="norms" src="../img/vector_norms.png" /></p>
-<p>As the loss function is used in an argmin to find the optimal model parameters, increasing the regularisation hyperparameter forces the parameters it is multiplied with to shrink. Overall, shrinking the parameters reduces the complexity of the model.</p>
-<h1 id="l1-lasso">L1 / Lasso</h1>
-<p>Uses the L1 norm as the regularisation / penalty term in the loss function.<br />
-As the L1 norm is the sum of absolute values of a vector, it is mathematically similar to a square funciton:<br />
-$abs(x) + abs(y) = diag$<br />
-Thus, it imposes a linear constraint:</p>
-<p><img alt="l1 constraint" src="../img/l1_constraint.png" /></p>
-<h1 id="l2-ridge">L2 / Ridge</h1>
-<p>Uses the L2 norm as the regularisation / penalty term in the loss function.<br />
-As the L2 norm is the square root of the sum of squared values of a vector, it is mathematically similar to a circle function:<br />
-$x^2 + y^2 = r^2$<br />
-Thus, it imposes a radial constraint:</p>
-<p><img alt="l2 constraint" src="../img/l2_constraint.png" /></p>
-<p>Unlike the L1 regularisation, the radial contours result in an optimal loss function with parameter values that do not lie on the axes. L2 is hence unable to shrink parameters to 0 unlike L1 regularisation.</p>
-<p><img alt="L1 vs L2 contours" src="../img/L1L2contour.png" /></p>
-<h1 id="references">References:</h1>
-<ul>
-<li>Visual explanation for regularisation of linear models <a href="https://explained.ai/regularization/index.html">article</a></li>
-<li>How does Lasso regression(L1) encourage zero coefficients but not the L2 <a href="https://medium.com/@mukulranjan/how-does-lasso-regression-l1-encourage-zero-coefficients-but-not-the-l2-20e4893cba5d">article</a></li>
-</ul>
+                <h1 id="nlp">NLP</h1>
+<p>At the core of natural language processing is the representation of words, phrases and sentences as machine-readable input.<br />
+The list below details the evolutionary path of this representation:
+1. Non-contextual embeddings
+  * Bag of words (BoW): A matrix of vectors that are numeric representations of tokenized text input. Specifically this BoW numerically represents the frequency of occurrence of words in a corpus.
+  * NN-generated embeddings (eg. Word2Vec / CBOW): Provides no context - only gives 1 representation of a word. Analogous to a lookup table, in stark contrast to contextual embeddings (eg. from BERT) that is able to output different embeddings for the same word used in different input sequences.
+2. Seq2Seq: Architecture comprising 2 RNNs - an encoder and a decoder - to perform natural language translation. This is used over a single RNN which would limit the output sequence to be the same size as the input sequence.
+3. Attention:  Used in the context of neural machine language translation, addresses the problem of the Seq2Seq RNN architecture having an insufficiently large context vector to represent the entirety of the input sequence.
+4. Self-attention: Used in the context of GLMs to create a representation of words in an input sequence. Apart from context, another difference between self-attention and attention is that self-attention considers context relative to "self" - the input sequence words - whilst attention considers context relative to the (hidden states of) decoder's output sequence. Self-attention is also faster as it processes the entirety of a sequence as input as opposed to one token at a time. Lastly, self-attention is also not bogged down by any coupling to a decoder output sequence.
+Self-attention trains weights for q,k,v that are optimized to capture a context for each word in an input sequence. An analogy would be q,k,v used in a database - q is a query into a particular context; k gives rise to the relevance/similarity between words to a q; v is the word value itself to which attention score is applied to give rise to a context embedding.
+5. Multi-head attention: Essentially a stacked self-attention architecture where each stack/head serves to train q,k,v weights that are optimized to capture multiple latent contexts for each word. Think of each head to learn 1 context for each word in the input sequence - in a single head, each word only has one weight matrix for q to capture 1 context</p>
               
             </div>
           </div><footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
-        <a href="../nlp/" class="btn btn-neutral float-left" title="NLP"><span class="icon icon-circle-arrow-left"></span> Previous</a>
-        <a href="../transformers/" class="btn btn-neutral float-right" title="Transformers">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../llms/" class="btn btn-neutral float-left" title="BERT"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../regularisation/" class="btn btn-neutral float-right" title="Regularisation">Next <span class="icon icon-circle-arrow-right"></span></a>
     </div>
 
   <hr/>
@@ -148,10 +136,10 @@ Thus, it imposes a radial constraint:</p>
   <span class="rst-current-version" data-toggle="rst-current-version">
     
     
-      <span><a href="../nlp/" style="color: #fcfcfc">&laquo; Previous</a></span>
+      <span><a href="../llms/" style="color: #fcfcfc">&laquo; Previous</a></span>
     
     
-      <span><a href="../transformers/" style="color: #fcfcfc">Next &raquo;</a></span>
+      <span><a href="../regularisation/" style="color: #fcfcfc">Next &raquo;</a></span>
     
   </span>
 </div>
