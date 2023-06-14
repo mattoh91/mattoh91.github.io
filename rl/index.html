@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://mattoh91.github.io/ml-notes/rl/" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Reinforcement Learning - Matt's ML Notes</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Reinforcement Learning";
+        var mkdocs_page_input_path = "rl.md";
+        var mkdocs_page_url = "/ml-notes/rl/";
+      </script>
+    
+    <script src="../js/jquery-3.6.0.min.js" defer></script>
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+      <script>hljs.initHighlightingOnLoad();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> Matt's ML Notes
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Welcome to Matt's AI Notes</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../attention/">Attention</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../hyperparam/">Hyperparameter Tuning</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../llms/">BERT</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../nlp/">NLP</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../regularisation/">Regularisation</a>
+                </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="./">Reinforcement Learning</a>
+    <ul class="current">
+    </ul>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../transformers/">Transformers</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../trees/">Tree-Based Models</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">Matt's ML Notes</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a> &raquo;</li>
+      <li>Reinforcement Learning</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="reinforcement-learning">Reinforcement Learning</h1>
+<p>Reinforcement Learning (RL) is a branch of Machine Learning. Unlike supervised learning where you specify what the model should be trained to <code>output</code>, RL involves defining a reward function to tell the model <code>what it is doing</code> well or poorly, and let the model figure out <code>how</code> to do things by choosing good actions at various states.</p>
+<h1 id="policy">Policy</h1>
+<p><img alt="rl policy" src="../img/rl_policy1.png" /></p>
+<p><img alt="rl policy example" src="../img/rl_policy2.png" /></p>
+<h1 id="return">Return</h1>
+<p>Return is the sum of the rewards that the system gets weighted by the discount factor $\gamma$, where rewards in the future are are weighted by $\gamma$ raised to a higher power. Semantically this means that the system will be disincentivised to pursue delayed rewards.</p>
+<p><img alt="rl return" src="../img/rl_return.png" /></p>
+<p>Note that the concept of <code>negative rewards</code> also exists, where the system is incentivised to delay its pursuit of such rewards (eg. paying back a loan).</p>
+<h1 id="markov-decision-process-mdp">Markov Decision Process (MDP)</h1>
+<p>Framework where the next immediate future state only depends on the current state</p>
+<p><img alt="markov decision process" src="../img/markovdecisionprocess.png" /></p>
+<h1 id="state-action-value-function-q-function">State Action Value Function (Q Function)</h1>
+<p>This is expressed as the function $Q(s,a) = Return$ if:
+* You start in state $s$
+* Take action $a$ (once)
+* Then behave optimally after that</p>
+<p><img alt="q function" src="../img/rl_qfunction.png" /></p>
+<h1 id="bellman-equation">Bellman Equation</h1>
+<ul>
+<li>This equation is used to compute the Q Function.  </li>
+<li>Take note of the following notation convention:</li>
+</ul>
+<p><img alt="bellman notation" src="../img/bellman_notation.png" /></p>
+<ul>
+<li>Terminal states have the following Bellman Equation since they have no "next" state and action: $Q(s,a) = R(s)$</li>
+<li>The Bellman Equation can be split into 2 components:</li>
+</ul>
+<p><img alt="bellman components" src="../img/bellman_components.png" /></p>
+<h1 id="stochastic-environment">Stochastic Environment</h1>
+<ul>
+<li>The system may not have deterministic / fixed actions. Eg. The Mars Rover could slip and make a step in the opposite direction.</li>
+<li>This warrants the introduction of randomness into the system.</li>
+<li><code>Return</code> is treated as a random variable.</li>
+<li>The goal of the Bellman Equation would thus be to maximise the <code>Expected Return</code>, which is analogous to the average of the random variable <code>Return</code>.</li>
+</ul>
+<p><img alt="expected return" src="../img/expected_return.png" /></p>
+<ul>
+<li>The Bellman Equation will include the <code>expected maximum return</code> of the next state.</li>
+</ul>
+<p><img alt="stochastic bellman" src="../img/stochastic_bellman.png" /></p>
+<h1 id="continuous-state-spaces">Continuous State Spaces</h1>
+<ul>
+<li>The initial simplified lunar landing rover example uses discrete states where it could be in 1 of 6 different positions.</li>
+<li>Real-life RL applications could involve states that take on continuous values.</li>
+<li>For example a vehicle could require the following continuous states:</li>
+<li>X-position</li>
+<li>Y-position</li>
+<li>Orientation / Facing</li>
+<li>Speed in x-direction</li>
+<li>Speed in y-direction</li>
+<li>Turning speed</li>
+</ul>
+<p><img alt="discrete vs continuous state" src="../img/discrete_vs_continuous_state.png" /></p>
+<ul>
+<li>These continuous states are represented using a vector. Note that this vector can also contain discrete values if needed.</li>
+</ul>
+<h1 id="deep-rl">Deep RL</h1>
+<ul>
+<li>Deep RL will be discussed using the example of the Lunar Lander.</li>
+</ul>
+<p><img alt="lunar lander problem" src="../img/lunarlander_problem.png" /></p>
+<ul>
+<li>x and y refer to horizontal and vertical distances. $\dot{x}$ and $\dot{y}$ refer to their corresponding velocities.</li>
+<li>$\theta$ refers to the lander's angle and $\dot{\theta}$ refers to the velocity of its tilting.</li>
+<li>$r$ and $l$ are binary states referring to the grounding of the right and left legs of the lander.</li>
+</ul>
+<p><img alt="deep rl example summary" src="../img/deeprl_summary.png" /></p>
+<ul>
+<li>Final layer with a single neuron is used to output $Q(s,a)$ which will also be referred to as $y$.</li>
+<li>$a$ is a component of vector $x$ that comprises booleans representing the 4 actions to take.</li>
+<li>
+<p>Nothing = no thrusters; left = left thrusters; right = right thruster; main = main thruster</p>
+</li>
+<li>
+<p>General concept is to:</p>
+</li>
+<li>Use Bellman's Equation to create a large dataset of multiple $\vec{x}$ and $y$</li>
+<li>Use supervised learning to learn a mapping from $\vec{x}$ to $y$</li>
+<li>The algorithm to do this is called the Deep Q Network (DQN) method:</li>
+</ul>
+<p><img alt="vanilla dqn" src="../img/vanilla_dqn.png" /></p>
+<ol>
+<li>A neural network $Q$ is randomly initialised similar to what is normally done for weight matrices. This initialisation is a random guess of what the $Q$ function should be.</li>
+<li>Generate the replay buffer (10,000 training examples) by feeding random $(s,a)$ into the neural network - which outputs the $Q(s,a)$ function. Record the resulting states and rewards $(R(s),s')$.</li>
+<li>A new neural network $Q_{new}$ is trained to map current (state and action) $x$, to the Bellman Equation $y$. The $Q(s',a')$ component of the Bellman Equation is obtained by passing $x = (s',a')$ into the initial $Q from step 1 for all 4 possible values of $a'$.</li>
+<li>$Q_{new}$ replaces the old $Q$ function.</li>
+<li>
+<p>Steps 1 to 4 are repeated several times. With every iteration, the neural network will become a better estimate for the $Q$ function.</p>
+</li>
+<li>
+<p>The DQN architecture can be improved by:</p>
+</li>
+<li>Setting its inputs to solely contain the states $s$ without the actions $a$.</li>
+<li>Changing the final layer to comprise a neuron to predict each action such that all actions can be predicted simultaneously.</li>
+</ol>
+<p><img alt="improved dqn" src="../img/improved_dqn.png" /></p>
+<h1 id="epsilon-greedy-policy">Epsilon Greedy Policy</h1>
+<ul>
+<li>Used to pick actions while system is still in the process of learning.</li>
+</ul>
+<p><img alt="epsilon greedy policy" src="../img/epsilon_greedy.png" /></p>
+<ul>
+<li>Comprises a greedy <code>exploitation</code> component that picks an action $a$ that maximises the $Q$ function.</li>
+<li>Comprises a second $\epsilon$ <code>exploration</code> hyperparameter to randomly try another action. This is to overcome the problem of potentially having a bad initialisation of $Q$ as exploration enables the system to try an action that it may have be initialised to recognise to result in a poor reward.</li>
+<li>Take note that RL is very sensitive to hyperparameters, which makes optimisation more difficult than supervised learning.</li>
+</ul>
+<h1 id="dqn-mini-batch-and-soft-updates">DQN Mini-Batch and Soft Updates</h1>
+<ul>
+<li>Mini-batching results in a more efficient optmisation step. For example SGD using all samples would take more time as it requires computing the gradient of the loss function which is an average.</li>
+<li>However this may abruptly compromise the update of $Q$ to $Q_{new}$ if the mini-batch happens to produce a bad update</li>
+</ul>
+<p><img alt="dqn mini-batch" src="../img/dqn_minibatch.png" /></p>
+<ul>
+<li>Soft update addresses this problem by assigning hyperparameterised coefficients to weight the amount of update to the old neural network weights and biases.</li>
+</ul>
+<p><img alt="soft update" src="../img/dqn_softupdate.png" /></p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../regularisation/" class="btn btn-neutral float-left" title="Regularisation"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../transformers/" class="btn btn-neutral float-right" title="Transformers">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../regularisation/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../transformers/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme_extra.js" defer></script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>
