@@ -2,47 +2,62 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://mattoh91.github.io/ml-notes/</loc>
-         <lastmod>2023-06-14</lastmod>
+         <lastmod>2023-06-28</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://mattoh91.github.io/ml-notes/attention/</loc>
-         <lastmod>2023-06-14</lastmod>
+         <lastmod>2023-06-28</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://mattoh91.github.io/ml-notes/cnn/</loc>
+         <lastmod>2023-06-28</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://mattoh91.github.io/ml-notes/hyperparam/</loc>
-         <lastmod>2023-06-14</lastmod>
+         <lastmod>2023-06-28</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://mattoh91.github.io/ml-notes/llms/</loc>
-         <lastmod>2023-06-14</lastmod>
+         <lastmod>2023-06-28</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://mattoh91.github.io/ml-notes/nlp/</loc>
-         <lastmod>2023-06-14</lastmod>
+         <lastmod>2023-06-28</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://mattoh91.github.io/ml-notes/promptengin/</loc>
+         <lastmod>2023-06-28</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://mattoh91.github.io/ml-notes/regularisation/</loc>
-         <lastmod>2023-06-14</lastmod>
+         <lastmod>2023-06-28</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://mattoh91.github.io/ml-notes/rl/</loc>
-         <lastmod>2023-06-14</lastmod>
+         <lastmod>2023-06-28</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://mattoh91.github.io/ml-notes/rnn/</loc>
+         <lastmod>2023-06-28</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://mattoh91.github.io/ml-notes/transformers/</loc>
-         <lastmod>2023-06-14</lastmod>
+         <lastmod>2023-06-28</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://mattoh91.github.io/ml-notes/trees/</loc>
-         <lastmod>2023-06-14</lastmod>
+         <lastmod>2023-06-28</lastmod>
          <changefreq>daily</changefreq>
     </url>
 </urlset>

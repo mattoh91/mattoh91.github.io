@@ -49,6 +49,10 @@
                 </li>
               </ul>
               <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../cnn/">Cnn</a>
+                </li>
+              </ul>
+              <ul>
                 <li class="toctree-l1"><a class="reference internal" href="../hyperparam/">Hyperparameter Tuning</a>
                 </li>
               </ul>
@@ -63,11 +67,19 @@
                 </li>
               </ul>
               <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../promptengin/">Prompt Engineering</a>
+                </li>
+              </ul>
+              <ul>
                 <li class="toctree-l1"><a class="reference internal" href="../regularisation/">Regularisation</a>
                 </li>
               </ul>
               <ul>
                 <li class="toctree-l1"><a class="reference internal" href="../rl/">Reinforcement Learning</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../rnn/">Rnn</a>
                 </li>
               </ul>
               <ul>
@@ -112,12 +124,66 @@ The list below details the evolutionary path of this representation:
 4. Self-attention: Used in the context of GLMs to create a representation of words in an input sequence. Apart from context, another difference between self-attention and attention is that self-attention considers context relative to "self" - the input sequence words - whilst attention considers context relative to the (hidden states of) decoder's output sequence. Self-attention is also faster as it processes the entirety of a sequence as input as opposed to one token at a time. Lastly, self-attention is also not bogged down by any coupling to a decoder output sequence.
 Self-attention trains weights for q,k,v that are optimized to capture a context for each word in an input sequence. An analogy would be q,k,v used in a database - q is a query into a particular context; k gives rise to the relevance/similarity between words to a q; v is the word value itself to which attention score is applied to give rise to a context embedding.
 5. Multi-head attention: Essentially a stacked self-attention architecture where each stack/head serves to train q,k,v weights that are optimized to capture multiple latent contexts for each word. Think of each head to learn 1 context for each word in the input sequence - in a single head, each word only has one weight matrix for q to capture 1 context</p>
+<h1 id="attention">Attention</h1>
+<ul>
+<li>Other references:</li>
+<li>Seq2Seq with attention <a href="https://jalammar.github.io/visualizing-neural-machine-translation-mechanics-of-seq2seq-models-with-attention/">article</a></li>
+</ul>
+<h1 id="evaluation">Evaluation</h1>
+<ul>
+<li>Perplexity</li>
+<li>Task: Evaluate general language model (non task-specific)</li>
+<li>Interpretation: The lower the perplexity score the better.</li>
+<li>Intuition 1: Perplexity is the inverse probability of the test set, normalised by the number of words.
+    <img alt="perplexity interpretation 1a" src="../img/perplexity_1a.png" /><br />
+<img alt="perplexity interpretation 1b" src="../img/perplexity_1b.png" /></li>
+<li>Intuition 2: Perplexity is the exponential of cross entropy. Where cross entropy $H(W)$ (for a sequence of words $W$) can be interpreted as the average number of <code>bits</code> required to store the information in a variable, perplexity can be interpreted as the average number of <code>words</code> that can be encoded using $H(W)$ bits. This is analagous to the concept of a <code>weighted branching factor</code> (see reference below), and represents the degree of difficulty the model has in predicting the next word in terms of the number of words it has to choose from.</li>
+<li>Reference: Perplexity in language models <a href="https://towardsdatascience.com/perplexity-in-language-models-87a196019a94">article</a></li>
+<li>BLEU</li>
+<li>Task: Translation</li>
+<li>Interpretation: The higher the BLEU score the better.</li>
+<li>BLEU score is the mean of n-gram precisions.</li>
+<li>The BLEU-1 score for unigrams for example:
+    <img alt="BLEU-1 example" src="../img/bleu1_eg.png" /><br />
+    where $Count_{clip}$ is the count of each token with a upper limit capped at the maximum number of times each token appears in the reference translations that are used for evaluation.</li>
+<li>BLEU is often computed as the mean of the individual BLEU scores of different n-grams. The longer n-grams are longer sequences that factor in sequence order.</li>
+<li>The BLEU score is often multiplied with a <code>brevity penalty</code>, as shorter translations often result in higher BLEU scores. For more information see the reference below.</li>
+<li>
+<p>Reference: DeepLearningAI Bleu Score <a href="https://www.youtube.com/watch?v=DejHQYAGb7Q">video</a></p>
+</li>
+<li>
+<p>ROUGE</p>
+</li>
+<li>Task: Summarisation</li>
+<li>Interpretation: The higher the ROUGE score the better.</li>
+<li>There are several variants of the ROUGE score.</li>
+<li>ROUGE-N compares the n-grams of the generated summary to the reference summary. Its recall, precision and F1 score can be computed thereafter.
+    <img alt="rouge-1 example" src="../img/rouge1_eg.png" /><br />
+<img alt="rouge-2 example" src="../img/rouge2_eg.png" />  <ul>
+<li>Recall is a measure of whether the model captured all the information in the <code>reference</code>.</li>
+<li>Precision is a measure of how much of the original (ground truth) <code>summary</code> is captured by the model. Should the model output a large variety of words it may have a high recall but low precision.</li>
+<li>F1 is a combination of recall and precision.</li>
+</ul>
+</li>
+<li>ROUGE-L measures the longest common subsequence (LCS) between the model output and evaluation references.<ul>
+<li>LCS refers to a subsequence of words that are not necessarily contiguous.</li>
+<li>Similar to ROUGE-N, recall / precision / F1 can be computed.
+  <img alt="rouge-l example" src="../img/rougel_eg.png" />  </li>
+<li>Unlike ROUGE-N, ROUGE-L does not depend on contiguous n-gram matches so it tends to capture sentence structure more accurately.</li>
+</ul>
+</li>
+<li>References:<ul>
+<li>HuggingFace What is the ROUGE Metric <a href="https://www.youtube.com/watch?v=TMshhnrEXlg">video</a></li>
+<li>The ultimate performance metric in nlp <a href="https://towardsdatascience.com/the-ultimate-performance-metric-in-nlp-111df6c64460">article</a></li>
+</ul>
+</li>
+</ul>
               
             </div>
           </div><footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
         <a href="../llms/" class="btn btn-neutral float-left" title="BERT"><span class="icon icon-circle-arrow-left"></span> Previous</a>
-        <a href="../regularisation/" class="btn btn-neutral float-right" title="Regularisation">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../promptengin/" class="btn btn-neutral float-right" title="Prompt Engineering">Next <span class="icon icon-circle-arrow-right"></span></a>
     </div>
 
   <hr/>
@@ -143,7 +209,7 @@ Self-attention trains weights for q,k,v that are optimized to capture a context 
       <span><a href="../llms/" style="color: #fcfcfc">&laquo; Previous</a></span>
     
     
-      <span><a href="../regularisation/" style="color: #fcfcfc">Next &raquo;</a></span>
+      <span><a href="../promptengin/" style="color: #fcfcfc">Next &raquo;</a></span>
     
   </span>
 </div>

@@ -49,6 +49,10 @@
                 </li>
               </ul>
               <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../cnn/">Cnn</a>
+                </li>
+              </ul>
+              <ul>
                 <li class="toctree-l1"><a class="reference internal" href="../hyperparam/">Hyperparameter Tuning</a>
                 </li>
               </ul>
@@ -61,6 +65,10 @@
                 </li>
               </ul>
               <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../promptengin/">Prompt Engineering</a>
+                </li>
+              </ul>
+              <ul>
                 <li class="toctree-l1"><a class="reference internal" href="../regularisation/">Regularisation</a>
                 </li>
               </ul>
@@ -68,6 +76,10 @@
                 <li class="toctree-l1 current"><a class="reference internal current" href="./">Reinforcement Learning</a>
     <ul class="current">
     </ul>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../rnn/">Rnn</a>
                 </li>
               </ul>
               <ul>
@@ -102,7 +114,11 @@
             <div class="section" itemprop="articleBody">
               
                 <h1 id="reinforcement-learning">Reinforcement Learning</h1>
-<p>Reinforcement Learning (RL) is a branch of Machine Learning. Unlike supervised learning where you specify what the model should be trained to <code>output</code>, RL involves defining a reward function to tell the model <code>what it is doing</code> well or poorly, and let the model figure out <code>how</code> to do things by choosing good actions at various states.</p>
+<ul>
+<li>Reinforcement Learning (RL) is a branch of Machine Learning. Unlike supervised learning where you specify what the model should be trained to <code>output</code>, RL involves defining a reward function to tell the model <code>what it is doing</code> well or poorly, and let the model figure out <code>how</code> to do things by choosing good actions at various states.</li>
+<li>References:</li>
+<li>Hugging Face <a href="https://huggingface.co/learn/deep-rl-course/unit0/introduction?fw=pt">course</a></li>
+</ul>
 <h1 id="policy">Policy</h1>
 <p><img alt="rl policy" src="../img/rl_policy1.png" /></p>
 <p><img alt="rl policy example" src="../img/rl_policy2.png" /></p>
@@ -218,12 +234,29 @@
 <li>Soft update addresses this problem by assigning hyperparameterised coefficients to weight the amount of update to the old neural network weights and biases.</li>
 </ul>
 <p><img alt="soft update" src="../img/dqn_softupdate.png" /></p>
+<h1 id="q-learning">Q-Learning</h1>
+<ul>
+<li>This is another method of RL. It differs from DQN in that it uses a <code>Q Table</code> instead of a neural network to model the $Q$ function. </li>
+<li>The <code>Q Table</code> has rows that represent states, columns that represent actions, and reward values ($Q$ function output).</li>
+<li>Q-learning is a <code>values-based</code> learning algorithm. Value based algorithms updates the value function based on an equation (particularly Bellman equation). </li>
+<li>The idea is that an optimal value function leads to an optimal policy $\pi^*$ with the objective of minimiing the loss between the predicted and target value to approximate the true action-value function.</li>
+<li>This differs from <code>policy-based</code> methods where we directly learn to approximate $\pi^*$ without having to learn a value function. The idea is to parameterise the policy. For instance, using a neural network $\pi_{\theta}$, this policy will output a probability distribution over actions (stochastic policy). The objective then is to maximize the performance of the parameterized policy using gradient <code>ascent</code> by controlling the parameter $\theta$ that will affect the distribution of actions over a state.</li>
+<li>Q-learning uses <code>Temporal Differences</code>(TD) to estimate the value of the final expected Q*(s,a). Temporal difference is an agent learning from an environment through episodes with no prior knowledge of the environment.</li>
+<li>Q-learning algorithm:</li>
+<li>Initialise Q-Table with 0 values.</li>
+<li>Choose and perform an action. This can be based on an Epsilon Greedy Policy where $\epsilon$ is set to a very high value in the first few iterations to encourage random exploration instead of greedy exploitation. The first action is chosen randomly given that the initial Q-Table only has 0 values.</li>
+<li>Measure reward.</li>
+<li>Update Q-Table.</li>
+<li>Repeat steps 2 - 4 until a desired state is reached.</li>
+<li>References:</li>
+<li>A Beginner's Guide to Q-Learning <a href="https://towardsdatascience.com/a-beginners-guide-to-q-learning-c3e2a30a653c">article</a></li>
+</ul>
               
             </div>
           </div><footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
         <a href="../regularisation/" class="btn btn-neutral float-left" title="Regularisation"><span class="icon icon-circle-arrow-left"></span> Previous</a>
-        <a href="../transformers/" class="btn btn-neutral float-right" title="Transformers">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../rnn/" class="btn btn-neutral float-right" title="Rnn">Next <span class="icon icon-circle-arrow-right"></span></a>
     </div>
 
   <hr/>
@@ -249,7 +282,7 @@
       <span><a href="../regularisation/" style="color: #fcfcfc">&laquo; Previous</a></span>
     
     
-      <span><a href="../transformers/" style="color: #fcfcfc">Next &raquo;</a></span>
+      <span><a href="../rnn/" style="color: #fcfcfc">Next &raquo;</a></span>
     
   </span>
 </div>
